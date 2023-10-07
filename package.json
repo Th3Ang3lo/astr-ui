@@ -1,0 +1,12 @@
+{
+  "name": "astra-ui",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "tsx": "^3.13.0",
+    "turbo": "^1.10.15",
+    "typescript": "^5.2.2"
+  }
+}
