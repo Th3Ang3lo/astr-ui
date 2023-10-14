@@ -1,0 +1,8 @@
+{
+  "extends": "@astra-ui/ts-config/base.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
