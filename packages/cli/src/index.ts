@@ -5,9 +5,9 @@
  * - [ ] Create ADD command to install desired component
  */
 
-import { program } from "commander"
+import { program } from 'commander'
 
-import { initCommand } from "@/commands/init-command"
+import { initCommand } from '@/commands/init-command'
 
 function main() {
   program.addCommand(initCommand)
