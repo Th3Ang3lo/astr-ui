@@ -10,11 +10,16 @@ import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
 import { handleEnvironmentError } from '@/utils/errors/handle-environment-error'
 import { handleError } from '@/utils/errors/handle-error'
+import { parse } from '@/utils/json'
 
 import { spinner } from '@/lib/spinner'
 import { logger } from '@/lib/logger'
 
-import { GITHUB_ENDPOINT_CONTENT_DIR, GITHUB_BRANCH_REF } from '@/constants'
+import {
+  GITHUB_ENDPOINT_CONTENT_DIR,
+  GITHUB_BRANCH_REF,
+  ASTRA_UI_JSON
+} from '@/constants'
 
 interface ResponseData {
   content: string
@@ -70,8 +75,11 @@ export const add = new Command()
       const librariesFoundComponent = getComponentLibraries(componentCode)
       await installComponentDependencies(librariesFoundComponent)
 
+      const astraUIJsonFile = await fs.readFile(ASTRA_UI_JSON, 'utf-8')
+      const componentPathAstraUIJsonFile = parse(astraUIJsonFile).componentPath
+
       await fs.writeFile(
-        `./src/components/ui/${componentToInstall}.tsx`,
+        `./${componentPathAstraUIJsonFile}/${componentToInstall}.tsx`,
         componentCode
       )
 

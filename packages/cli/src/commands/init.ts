@@ -42,12 +42,12 @@ export const init = new Command()
       spinnerPrepareEnvironment.text = 'Preparing environment to add Astra UI components'
       spinnerPrepareEnvironment.start()
 
-      const componentsPath = `${rootDirComponents}/${ADD_COMPONENTS_PATH}`
+      const componentPath = `${rootDirComponents}/${ADD_COMPONENTS_PATH}`
 
-      const checkComponentsDirectoryExists = existsSync(componentsPath)
+      const checkComponentsDirectoryExists = existsSync(componentPath)
 
       if (!checkComponentsDirectoryExists) {
-        await fs.mkdir(componentsPath, {
+        await fs.mkdir(componentPath, {
           recursive: true,
         })
       }
@@ -56,7 +56,7 @@ export const init = new Command()
 
       const astraUIConfigFile = stringify({
         ...astraUIJson,
-        componentsPath,
+        componentPath,
       })
 
       await fs.writeFile(ASTRA_UI_JSON, astraUIConfigFile, 'utf-8')

@@ -38,6 +38,12 @@ importers:
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-native:
+        specifier: ^0.72.6
+        version: 0.72.6(@babel/core@7.23.2)(@babel/preset-env@7.23.2)(react@18.2.0)
     devDependencies:
       '@astra-ui/ts-config':
         specifier: workspace*
