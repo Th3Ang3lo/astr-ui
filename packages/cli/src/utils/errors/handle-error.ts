@@ -4,7 +4,7 @@ import { logger } from '@/lib/logger'
 
 import { SERVICE_ERROR_REASON } from '@/constants'
 
-export function handleError(error: unknown) {
+export function handleError(error: unknown, isEnableLog?: boolean) {
   try {
     const instanceError = error as Error
 
@@ -12,12 +12,11 @@ export function handleError(error: unknown) {
 
     if (error instanceof AxiosError) {
       errorReason = SERVICE_ERROR_REASON
-
-      logger.error(errorReason)
-      return
     }
 
-    logger.error(errorReason)
+    if (isEnableLog) {
+      logger.error(errorReason)
+    }
     return
   } finally {
     process.exit(1)

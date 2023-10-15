@@ -18,7 +18,7 @@ import { logger } from '@/lib/logger'
 import {
   GITHUB_ENDPOINT_CONTENT_DIR,
   GITHUB_BRANCH_REF,
-  ASTRA_UI_JSON
+  ASTRA_UI_JSON,
 } from '@/constants'
 
 interface ResponseData {
@@ -43,19 +43,11 @@ export const add = new Command()
       let componentToInstall = componentName
 
       if (!componentName) {
-        const { selectedComponentName } = await prompts({
-          type: 'select',
-          name: 'selectedComponentName',
-          message: 'Choose a component you want to install:',
-          choices: componentOptionsAvailable.map((component) => {
-            return {
-              title: component,
-              value: component,
-            }
-          }),
-        })
+        const selectedComponent = await promptSelectComponent(
+          componentOptionsAvailable
+        )
 
-        componentToInstall = selectedComponentName
+        componentToInstall = selectedComponent
       }
 
       if (!componentOptionsAvailable.includes(componentToInstall)) {
@@ -65,8 +57,8 @@ export const add = new Command()
       spinnerAddComponent.text = `Copying code from component ${componentToInstall} to your project`
       spinnerAddComponent.start()
 
-      const componentPath = `./packages/components/src/${componentToInstall}.tsx`
-      const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${componentPath}?${GITHUB_BRANCH_REF}`
+      const repositoryComponentPath = `./packages/components/src/${componentToInstall}.tsx`
+      const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${repositoryComponentPath}?${GITHUB_BRANCH_REF}`
 
       const { data } = await GITHUB_API.get<ResponseData>(request)
 
@@ -75,11 +67,11 @@ export const add = new Command()
       const librariesFoundComponent = getComponentLibraries(componentCode)
       await installComponentDependencies(librariesFoundComponent)
 
-      const astraUIJsonFile = await fs.readFile(ASTRA_UI_JSON, 'utf-8')
-      const componentPathAstraUIJsonFile = parse(astraUIJsonFile).componentPath
+      const astraUIConfigFile = await fs.readFile(ASTRA_UI_JSON, 'utf-8')
+      const componentPath = parse(astraUIConfigFile).componentPath
 
       await fs.writeFile(
-        `./${componentPathAstraUIJsonFile}/${componentToInstall}.tsx`,
+        `./${componentPath}/${componentToInstall}.tsx`,
         componentCode
       )
 
@@ -89,7 +81,23 @@ export const add = new Command()
         `Component ${componentToInstall} has been successfully added to your project`
       )
     } catch (error) {
-      spinnerAddComponent.fail()
+      spinnerAddComponent.fail(error.message)
       handleError(error)
     }
   })
+
+async function promptSelectComponent(componentOptions: string[]) {
+  const response = await prompts({
+    type: 'select',
+    name: 'selectedComponent',
+    message: 'Choose a component you want to install:',
+    choices: componentOptions.map((component) => {
+      return {
+        title: component,
+        value: component,
+      }
+    }),
+  })
+
+  return response.selectedComponent
+}
