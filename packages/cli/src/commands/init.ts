@@ -5,7 +5,7 @@ import fs from 'node:fs'
 
 import { logger } from '@/utils/logger'
 
-export const initCommand = new Command()
+export const init = new Command()
   .name('init')
   .description('Command to prepare the Astra UI development environment')
   .action(async () => {

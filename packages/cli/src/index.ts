@@ -1,16 +1,12 @@
-/**
- * What needs to be done?
- *
- * - [x] Create INIT command to prepare the environment
- * - [ ] Create ADD command to install desired component
- */
-
 import { program } from 'commander'
 
-import { initCommand } from '@/commands/init-command'
+import { init } from '@/commands/init'
+import { add } from '@/commands/add'
 
 function main() {
-  program.addCommand(initCommand)
+  program
+    .addCommand(init)
+    .addCommand(add)
 
   program.parse()
 }
