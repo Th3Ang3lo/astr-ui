@@ -3,7 +3,7 @@ import prompts from 'prompts'
 
 import fs from 'node:fs'
 
-import { logger } from '@/utils/logger'
+import { logger } from '@/lib/logger'
 import { parse, stringify } from '@/utils/json'
 
 import {

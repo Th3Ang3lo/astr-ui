@@ -11,14 +11,16 @@ import {
   GITHUB_ENDPOINT_CONTENT_DIR,
   GITHUB_BRANCH_REF,
   ENVIRONMENT_ERROR_REASON,
-  SERVICE_ERROR_REASON
+  SERVICE_ERROR_REASON,
 } from '@/constants'
 
 import { handleEnvironmentError } from '@/utils/handle-environment-error'
 import { getOptionsAvailableComponents } from '@/utils/get-options-available-components'
 import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
-import { logger } from '@/utils/logger'
+
+import { logger } from '@/lib/logger'
+import { spinner } from '@/lib/spinner'
 
 interface ResponseData {
   content: string
@@ -44,20 +46,26 @@ export const add = new Command()
           type: 'select',
           name: 'selectedComponentName',
           message: 'Choose a component you want to install:',
-          choices: componentOptionsAvailable.map(component => {
+          choices: componentOptionsAvailable.map((component) => {
             return {
               title: component,
-              value: component
+              value: component,
             }
-          })
+          }),
         })
 
         componentToInstall = selectedComponentName
       }
 
+      const spinnerAddComponent = spinner(
+        `Copying code from component ${componentToInstall} to your project`
+      )
+
       if (!componentOptionsAvailable.includes(componentToInstall)) {
         throw new Error('Component not found. Try again')
       }
+
+      spinnerAddComponent.start()
 
       const componentPath = `./packages/components/src/${componentToInstall}.tsx`
       const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${componentPath}?${GITHUB_BRANCH_REF}`
@@ -70,13 +78,11 @@ export const add = new Command()
       await installComponentDependencies(librariesFoundComponent)
 
       await fs.writeFile(
-          `./src/components/ui/${componentToInstall}.tsx`,
-          componentCode,
+        `./src/components/ui/${componentToInstall}.tsx`,
+        componentCode
       )
 
-      logger.success(
-        `Component ${componentToInstall} has been installed successfully`
-      )
+      spinnerAddComponent.succeed()
     } catch (error) {
       let errorReason = error.message
       const errorCode = error.code
