@@ -1,58 +1,102 @@
 import { Command } from 'commander'
 import prompts from 'prompts'
 
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 
-import axios from 'axios'
+import { AxiosError } from 'axios'
 
+import { GITHUB_API } from '@/services/github-api'
+
+import {
+  GITHUB_ENDPOINT_CONTENT_DIR,
+  GITHUB_BRANCH_REF,
+  ENVIRONMENT_ERROR_REASON,
+  SERVICE_ERROR_REASON
+} from '@/constants'
+
+import { handleEnvironmentError } from '@/utils/handle-environment-error'
+import { getOptionsAvailableComponents } from '@/utils/get-options-available-components'
 import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
 import { logger } from '@/utils/logger'
 
-import { GITHUB_BASE_URL, GITHUB_ENDPOINT_GET_CODE } from '@/constants'
+/**
+ * Refatorar código
+ * Disparar error caso não tenha rodado o comando init
+ * Adicionar feedback de loading
+ * Ajustar função gerenciador de pacote
+ */
 
 interface ResponseData {
   content: string
 }
 
+const commandName = 'add'
+const commandDescription = 'Command to add Astra UI component to your project'
+
 export const add = new Command()
-  .name('add')
-  .description('Command to install a desired Astra UI component')
-  .argument('[string]', 'Component name for installation')
+  .name(commandName)
+  .description(commandDescription)
+  .argument('[component]', 'Component name for installation')
   .action(async (componentName) => {
-    let componentToInstall = componentName
+    try {
+      handleEnvironmentError()
 
-    if (!componentName) {
-      const { selectedComponentName } = await prompts({
-        type: 'select',
-        name: 'selectedComponentName',
-        message: 'Choose a component you want to install:',
-        choices: [
-          {
-            title: 'button',
-            value: 'button',
-          },
-        ],
-      })
+      const componentOptionsAvailable = await getOptionsAvailableComponents()
 
-      componentToInstall = selectedComponentName
+      let componentToInstall = componentName
+
+      if (!componentName) {
+        const { selectedComponentName } = await prompts({
+          type: 'select',
+          name: 'selectedComponentName',
+          message: 'Choose a component you want to install:',
+          choices: componentOptionsAvailable.map(component => {
+            return {
+              title: component,
+              value: component
+            }
+          })
+        })
+
+        componentToInstall = selectedComponentName
+      }
+
+      if (!componentOptionsAvailable.includes(componentToInstall)) {
+        throw new Error('Component not found. Try again')
+      }
+
+      const componentPath = `./packages/components/src/${componentToInstall}.tsx`
+      const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${componentPath}?${GITHUB_BRANCH_REF}`
+
+      const { data } = await GITHUB_API.get<ResponseData>(request)
+
+      const componentCode = atob(data.content)
+
+      const librariesFoundComponent = getComponentLibraries(componentCode)
+      await installComponentDependencies(librariesFoundComponent)
+
+      await fs.writeFile(
+          `./src/components/ui/${componentToInstall}.tsx`,
+          componentCode,
+      )
+
+      logger.success(
+        `Component ${componentToInstall} has been installed successfully`
+      )
+    } catch (error) {
+      let errorReason = error.message
+      const errorCode = error.code
+
+      if (errorCode === 'ENOENT') {
+        errorReason = ENVIRONMENT_ERROR_REASON
+      }
+
+      if (error instanceof AxiosError) {
+        errorReason = SERVICE_ERROR_REASON
+      }
+
+      logger.error(errorReason)
+      process.exit(1)
     }
-
-    const componentPath = `./packages/components/src/${componentToInstall}.tsx`
-    const url = `${GITHUB_BASE_URL}/${GITHUB_ENDPOINT_GET_CODE}/${componentPath}?ref=package/cli`
-
-    const { data } = await axios<ResponseData>(url, {
-      method: 'GET'
-    })
-
-    const componentCode = atob(data.content)
-
-    const librariesFoundComponent = getComponentLibraries(componentCode)
-    await installComponentDependencies(librariesFoundComponent)
-
-    fs.writeFileSync(`./src/components/ui/${componentToInstall}.tsx`, componentCode)
-
-    logger.success(
-      `Component ${componentToInstall} has been installed successfully`
-    )
   })
