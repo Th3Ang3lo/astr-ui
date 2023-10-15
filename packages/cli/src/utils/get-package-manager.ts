@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 
-export function packageManagerDetector() {
+export function getPackageManager() {
   // TODO - Change directories when finished development
   const packageManagers: Record<string, string> = {
     npm: '../../package-lock.json',
