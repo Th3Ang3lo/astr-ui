@@ -3,24 +3,18 @@ import prompts from 'prompts'
 
 import fs from 'node:fs/promises'
 
-import { AxiosError } from 'axios'
-
 import { GITHUB_API } from '@/services/github-api'
 
-import {
-  GITHUB_ENDPOINT_CONTENT_DIR,
-  GITHUB_BRANCH_REF,
-  ENVIRONMENT_ERROR_REASON,
-  SERVICE_ERROR_REASON,
-} from '@/constants'
-
-import { handleEnvironmentError } from '@/utils/handle-environment-error'
 import { getOptionsAvailableComponents } from '@/utils/get-options-available-components'
 import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
+import { handleEnvironmentError } from '@/utils/errors/handle-environment-error'
+import { handleError } from '@/utils/errors/handle-error'
 
-import { logger } from '@/lib/logger'
 import { spinner } from '@/lib/spinner'
+import { logger } from '@/lib/logger'
+
+import { GITHUB_ENDPOINT_CONTENT_DIR, GITHUB_BRANCH_REF } from '@/constants'
 
 interface ResponseData {
   content: string
@@ -28,6 +22,8 @@ interface ResponseData {
 
 const commandName = 'add'
 const commandDescription = 'Command to add Astra UI component to your project'
+
+const spinnerAddComponent = spinner()
 
 export const add = new Command()
   .name(commandName)
@@ -57,14 +53,11 @@ export const add = new Command()
         componentToInstall = selectedComponentName
       }
 
-      const spinnerAddComponent = spinner(
-        `Copying code from component ${componentToInstall} to your project`
-      )
-
       if (!componentOptionsAvailable.includes(componentToInstall)) {
         throw new Error('Component not found. Try again')
       }
 
+      spinnerAddComponent.text = `Copying code from component ${componentToInstall} to your project`
       spinnerAddComponent.start()
 
       const componentPath = `./packages/components/src/${componentToInstall}.tsx`
@@ -83,19 +76,12 @@ export const add = new Command()
       )
 
       spinnerAddComponent.succeed()
+
+      logger.success(
+        `Component ${componentToInstall} has been successfully added to your project`
+      )
     } catch (error) {
-      let errorReason = error.message
-      const errorCode = error.code
-
-      if (errorCode === 'ENOENT') {
-        errorReason = ENVIRONMENT_ERROR_REASON
-      }
-
-      if (error instanceof AxiosError) {
-        errorReason = SERVICE_ERROR_REASON
-      }
-
-      logger.error(errorReason)
-      process.exit(1)
+      spinnerAddComponent.fail()
+      handleError(error)
     }
   })
