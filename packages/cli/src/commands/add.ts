@@ -20,13 +20,6 @@ import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
 import { logger } from '@/utils/logger'
 
-/**
- * Refatorar código
- * Disparar error caso não tenha rodado o comando init
- * Adicionar feedback de loading
- * Ajustar função gerenciador de pacote
- */
-
 interface ResponseData {
   content: string
 }
