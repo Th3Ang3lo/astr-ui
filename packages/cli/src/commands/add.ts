@@ -38,19 +38,21 @@ export const add = new Command()
       componentToInstall = selectedComponentName
     }
 
-    const componentPath = `./src/components/Form/${componentToInstall}/index.tsx`
-    const url = `${GITHUB_BASE_URL}/${GITHUB_ENDPOINT_GET_CODE}/${componentPath}`
+    const componentPath = `./packages/components/src/${componentToInstall}.tsx`
+    const url = `${GITHUB_BASE_URL}/${GITHUB_ENDPOINT_GET_CODE}/${componentPath}?ref=package/cli`
 
-    const { data } = await axios<ResponseData>(url)
+    const { data } = await axios<ResponseData>(url, {
+      method: 'GET'
+    })
 
     const componentCode = atob(data.content)
 
     const librariesFoundComponent = getComponentLibraries(componentCode)
     await installComponentDependencies(librariesFoundComponent)
 
-    fs.writeFileSync(`./src/components/ui/${componentName}.tsx`, componentCode)
+    fs.writeFileSync(`./src/components/ui/${componentToInstall}.tsx`, componentCode)
 
     logger.success(
-      `Component ${componentName} has been installed successfully`
+      `Component ${componentToInstall} has been installed successfully`
     )
   })
