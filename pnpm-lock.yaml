@@ -42,6 +42,9 @@ importers:
         specifier: ^2.4.2
         version: 2.4.2
     devDependencies:
+      '@astra-ui/eslint-config':
+        specifier: workspace*
+        version: link:../eslint-config
       '@astra-ui/ts-config':
         specifier: workspace*
         version: link:../ts-config
