@@ -1,10 +1,16 @@
 {
   "name": "@astra-ui/cli",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --dts --format esm,cjs"
   },
   "devDependencies": {
     "@astra-ui/ts-config": "workspace*",
