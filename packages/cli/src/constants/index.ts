@@ -1,4 +1,4 @@
-import { stringify } from "@/utils/json"
+import { stringify } from '@/utils/json'
 
 // GitHub
 export const GITHUB_BASE_URL = 'https://api.github.com'

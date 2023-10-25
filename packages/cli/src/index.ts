@@ -3,7 +3,7 @@ import { program } from 'commander'
 import { init } from '@/commands/init'
 import { add } from '@/commands/add'
 
-function main() {
+function main () {
   program
     .addCommand(init)
     .addCommand(add)

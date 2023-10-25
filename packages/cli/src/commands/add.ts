@@ -18,7 +18,7 @@ import { logger } from '@/lib/logger'
 import {
   GITHUB_ENDPOINT_CONTENT_DIR,
   GITHUB_BRANCH_REF,
-  ASTRA_UI_JSON,
+  ASTRA_UI_JSON
 } from '@/constants'
 
 interface ResponseData {
@@ -86,7 +86,7 @@ export const add = new Command()
     }
   })
 
-async function promptSelectComponent(componentOptions: string[]) {
+async function promptSelectComponent (componentOptions: string[]) {
   const response = await prompts({
     type: 'select',
     name: 'selectedComponent',
@@ -94,9 +94,9 @@ async function promptSelectComponent(componentOptions: string[]) {
     choices: componentOptions.map((component) => {
       return {
         title: component,
-        value: component,
+        value: component
       }
-    }),
+    })
   })
 
   return response.selectedComponent

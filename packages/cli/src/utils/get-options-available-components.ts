@@ -9,7 +9,7 @@ interface ResponseData {
   name: string
 }
 
-export async function getOptionsAvailableComponents(): Promise<string[]> {
+export async function getOptionsAvailableComponents (): Promise<string[]> {
   try {
     const request = `/${GITHUB_ENDPOINT_CONTENT_DIR}/packages/components/src?${GITHUB_BRANCH_REF}`
 

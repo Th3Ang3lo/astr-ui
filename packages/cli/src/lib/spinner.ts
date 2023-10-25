@@ -1,6 +1,6 @@
 import ora from 'ora'
-import chalk, { ColorName } from 'chalk'
+import chalk, { type ColorName } from 'chalk'
 
-export function spinner(label?: string, labelColor?: ColorName) {
-  return ora(chalk[labelColor || 'white'](label))
+export function spinner (label?: string, labelColor?: ColorName) {
+  return ora(chalk[labelColor ?? 'white'](label))
 }

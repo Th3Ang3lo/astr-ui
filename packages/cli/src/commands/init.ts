@@ -12,7 +12,7 @@ import { logger } from '@/lib/logger'
 import {
   ADD_COMPONENTS_PATH,
   ASTRA_UI_JSON_CONTENT,
-  ASTRA_UI_JSON,
+  ASTRA_UI_JSON
 } from '@/constants'
 
 const commandName = 'init'
@@ -34,7 +34,7 @@ export const init = new Command()
     }
   })
 
-async function runInitCommand() {
+async function runInitCommand () {
   const rootDirComponents = await promptAskingSaveComponent()
 
   if (!rootDirComponents) {
@@ -53,7 +53,7 @@ async function runInitCommand() {
 
   if (!checkComponentsDirectoryExists) {
     await fs.mkdir(componentPath, {
-      recursive: true,
+      recursive: true
     })
   }
 
@@ -61,7 +61,7 @@ async function runInitCommand() {
 
   const astraUIConfigFile = stringify({
     ...astraUIJson,
-    componentPath,
+    componentPath
   })
 
   await fs.writeFile(ASTRA_UI_JSON, astraUIConfigFile, 'utf-8')
@@ -74,12 +74,12 @@ async function runInitCommand() {
   )
 }
 
-async function promptAskingSaveComponent() {
+async function promptAskingSaveComponent () {
   const response = await prompts({
     type: 'text',
     name: 'rootDirComponents',
     message: 'Where do you want to save your components?',
-    initial: 'src',
+    initial: 'src'
   })
 
   return response.rootDirComponents

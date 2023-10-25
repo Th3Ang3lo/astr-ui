@@ -10,10 +10,12 @@
   },
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsup src/index.ts --dts --format esm,cjs"
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "lint": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
     "@astra-ui/ts-config": "workspace*",
+    "@astra-ui/eslint-config": "workspace*",
     "@types/node": "^20.8.6",
     "@types/prompts": "^2.4.6"
   },
