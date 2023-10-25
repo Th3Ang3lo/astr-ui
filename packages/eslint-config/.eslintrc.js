@@ -10,5 +10,18 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react'],
-  rules: {},
+  rules: {
+    '@typescript-eslint/space-before-function-paren': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'array-callback-return': 'off',
+    'no-prototype-builtins': 'off',
+    'no-useless-return': 'off'
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  }
 };
