@@ -1,6 +1,0 @@
-{
-  "extends": "@astra-ui/ts-config/react.json",
-  "compilerOptions": {
-    "jsx": "react-native"
-  }
-}
