@@ -39,7 +39,7 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  apps/astra-components:
+  apps/ast-components:
     dependencies:
       expo:
         specifier: ~49.0.15
@@ -97,7 +97,7 @@ importers:
         specifier: ^4.6.3
         version: 4.6.3(react-native@0.72.6)(react@18.2.0)
 
-  packages/astra:
+  packages/cli:
     dependencies:
       axios:
         specifier: ^1.5.1
@@ -3116,7 +3116,7 @@ packages:
       '@storybook/core-events': 6.5.16
       core-js: 3.33.1
       global: 4.4.0
-      qs: 6.11.0
+      qs: 6.11.2
       telejson: 6.0.8
     dev: true
 
@@ -3158,7 +3158,7 @@ packages:
       global: 4.4.0
       lodash: 4.17.21
       memoizerific: 1.11.3
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11
@@ -3186,7 +3186,7 @@ packages:
       '@storybook/theming': 6.5.16(react-dom@18.2.0)(react@18.2.0)
       core-js: 3.33.1
       memoizerific: 1.11.3
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11
@@ -3219,7 +3219,7 @@ packages:
       core-js: 3.33.1
       global: 4.4.0
       lodash: 4.17.21
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11
@@ -3339,7 +3339,7 @@ packages:
       core-js: 3.33.1
       global: 4.4.0
       lodash: 4.17.21
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11
@@ -3407,7 +3407,7 @@ packages:
       '@storybook/client-logger': 6.5.16
       core-js: 3.33.1
       memoizerific: 1.11.3
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11
@@ -3478,7 +3478,7 @@ packages:
       '@storybook/theming': 6.5.16(react-dom@18.2.0)(react@18.2.0)
       core-js: 3.33.1
       memoizerific: 1.11.3
-      qs: 6.11.0
+      qs: 6.11.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       regenerator-runtime: 0.13.11

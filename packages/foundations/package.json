@@ -1,7 +1,7 @@
 {
-  "name": "@lucasaugustsof/foundations",
+  "name": "@ast-ui/foundations",
   "description": "Unify aesthetics and ensure visual consistency across your projects",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "keywords": [
     "Foundations",
     "Design",

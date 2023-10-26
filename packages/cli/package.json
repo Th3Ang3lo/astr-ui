@@ -1,5 +1,5 @@
 {
-  "name": "@lucasaugustsof/astra",
+  "name": "@ast-ui/cli",
   "description": "Copy and paste beautifully designed components for React Native",
   "keywords": [
     "Components",
@@ -13,7 +13,7 @@
     "url": "https://github.com/lucasaugustsof/astra-ui.git",
     "directory": "packages/astra"
   },
-  "version": "0.1.0",
+  "version": "0.0.0",
   "bin": "dist/index.js",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -1,9 +1,11 @@
 {
-  "name": "astra-ui",
-  "license": "MIT",
+  "name": "ast-ui",
   "private": true,
   "scripts": {
-    "husky:prepare": "husky install"
+    "husky:prepare": "husky install",
+    "changeset": "npx @changesets/cli",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=ast-components && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
