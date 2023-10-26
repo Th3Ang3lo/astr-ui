@@ -1,0 +1,14 @@
+{
+  "name": "@lucasaugustsof/foundations",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs"
+  },
+  "devDependencies": {
+    "@lucasaugustsof/ts-config": "workspace*"
+  }
+}

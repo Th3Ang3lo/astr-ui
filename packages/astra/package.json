@@ -14,7 +14,7 @@
     "lint": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
-    "@astra-ui/ts-config": "workspace*",
+    "@lucasaugustsof/ts-config": "workspace*",
     "@types/node": "^20.8.6",
     "@types/prompts": "^2.4.6"
   },

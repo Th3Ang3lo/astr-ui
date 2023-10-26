@@ -115,7 +115,7 @@ importers:
         specifier: ^2.4.2
         version: 2.4.2
     devDependencies:
-      '@astra-ui/ts-config':
+      '@lucasaugustsof/ts-config':
         specifier: workspace*
         version: link:../ts-config
       '@types/node':
@@ -124,6 +124,12 @@ importers:
       '@types/prompts':
         specifier: ^2.4.6
         version: 2.4.7
+
+  packages/foundations:
+    devDependencies:
+      '@lucasaugustsof/ts-config':
+        specifier: workspace*
+        version: link:../ts-config
 
   packages/ts-config: {}
 
