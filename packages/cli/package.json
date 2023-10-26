@@ -1,10 +1,25 @@
 {
-  "name": "@astra-ui/cli",
-  "version": "1.0.0",
+  "name": "@ast-ui/cli",
+  "description": "Copy and paste beautifully designed components for React Native",
+  "keywords": [
+    "Components",
+    "Copy and paste",
+    "React Native",
+    "Agility",
+    "Accessibility"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasaugustsof/astra-ui.git",
+    "directory": "packages/astra"
+  },
+  "version": "0.0.0",
+  "bin": "dist/index.js",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "private": false,
   "engines": {
     "node": ">=16"
   },
@@ -14,8 +29,7 @@
     "lint": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
-    "@astra-ui/ts-config": "workspace*",
-    "@astra-ui/eslint-config": "workspace*",
+    "@ast-ui/ts-config": "workspace*",
     "@types/node": "^20.8.6",
     "@types/prompts": "^2.4.6"
   },

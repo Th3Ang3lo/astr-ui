@@ -1,12 +1,15 @@
 {
-  "name": "astra-ui",
-  "license": "MIT",
+  "name": "ast-ui",
   "private": true,
   "scripts": {
-    "husky:prepare": "husky install"
+    "husky:prepare": "husky install",
+    "changeset": "npx @changesets/cli",
+    "increase-version": "changeset version",
+    "release": "turbo run build --filter=ast-components && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
+    "@lucasaugustsof/eslint-config": "^1.0.0",
     "commitlint": "^18.1.0",
     "eslint": "^8.52.0",
     "husky": "^8.0.3",

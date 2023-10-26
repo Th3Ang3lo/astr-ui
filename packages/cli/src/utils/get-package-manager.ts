@@ -1,11 +1,11 @@
 import fs from 'node:fs'
 
-export function getPackageManager () {
+export function getPackageManager() {
   // TODO - Change directories when finished development
   const packageManagers: Record<string, string> = {
     npm: '../../package-lock.json',
     yarn: '../../yarn.lock',
-    pnpm: '../../pnpm-lock.yaml'
+    pnpm: '../../pnpm-lock.yaml',
     // bun: './bun.lockb'
   }
 

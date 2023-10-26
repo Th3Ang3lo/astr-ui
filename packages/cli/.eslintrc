@@ -1,5 +1,9 @@
 {
   "extends": [
-    "@astra-ui/eslint-config"
-  ]
+    "@lucasaugustsof/eslint-config/node"
+  ],
+  "rules": {
+    "array-callback-return": "off",
+    "no-prototype-builtins": "off"
+  }
 }

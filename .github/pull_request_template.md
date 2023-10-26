@@ -9,7 +9,7 @@
 - [ ] I've added comments to help explain the changes made
 - [ ] Reviewed the documentation (if applicable)
 
-## Proposed Changes
+## Reason for change/improvement
 
 [List or describe the changes proposed in this PR. For example:]
 
@@ -17,7 +17,7 @@
 - Added new feature `y`
 - Performance improvements in component `z`
 
-## Additional Information
+## Additional information
 
 [Any additional information that might help understand the PR or that's relevant for the review.]
 

@@ -1,4 +1,4 @@
-export function getComponentLibraries (componentCode: string) {
+export function getComponentLibraries(componentCode: string) {
   const regexNameLibrary = /import\s+.*\s+from\s+['"]([^'"]+)['"]/
   const regexImports = /import .+? from '(?!\.\/|\.\.\/)[^']+'/g
 
