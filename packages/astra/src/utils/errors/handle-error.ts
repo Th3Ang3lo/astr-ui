@@ -17,7 +17,6 @@ export function handleError(error: unknown, isEnableLog?: boolean) {
     if (isEnableLog) {
       logger.error(errorReason)
     }
-    return
   } finally {
     process.exit(1)
   }

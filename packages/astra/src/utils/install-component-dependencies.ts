@@ -5,7 +5,7 @@ import { promisify } from 'node:util'
 
 const executor = promisify(exec)
 
-export async function installComponentDependencies (libraries: string[]) {
+export async function installComponentDependencies(libraries: string[]) {
   const packageManager = 'pnpm'
 
   const packageJsonFile = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))

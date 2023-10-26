@@ -11,10 +11,7 @@ export function handleEnvironmentError() {
     throw new Error(ENVIRONMENT_ERROR_REASON)
   }
 
-  const requiredFileProperties = [
-    'componentPath',
-    'components'
-  ]
+  const requiredFileProperties = ['componentPath', 'components']
 
   const astraUIJsonFileParsed = parse(fs.readFileSync(ASTRA_UI_JSON, 'utf-8'))
 

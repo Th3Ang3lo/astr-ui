@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "@lucasaugustsof/eslint-config/node"
+  ],
+  "rules": {
+    "array-callback-return": "off",
+    "no-prototype-builtins": "off"
+  }
+}

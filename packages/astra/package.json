@@ -1,5 +1,5 @@
 {
-  "name": "@astra-ui/cli",
+  "name": "@lucasaugustsof/astra",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@astra-ui/ts-config": "workspace*",
-    "@astra-ui/eslint-config": "workspace*",
     "@types/node": "^20.8.6",
     "@types/prompts": "^2.4.6"
   },
