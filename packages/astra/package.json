@@ -1,10 +1,25 @@
 {
   "name": "@lucasaugustsof/astra",
-  "version": "1.0.0",
+  "description": "Copy and paste beautifully designed components for React Native",
+  "keywords": [
+    "Components",
+    "Copy and paste",
+    "React Native",
+    "Agility",
+    "Accessibility"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasaugustsof/astra-ui.git",
+    "directory": "packages/astra"
+  },
+  "version": "0.1.0",
+  "bin": "dist/index.js",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "private": false,
   "engines": {
     "node": ">=16"
   },

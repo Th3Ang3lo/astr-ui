@@ -1,10 +1,24 @@
 {
   "name": "@lucasaugustsof/foundations",
-  "version": "1.0.0",
+  "description": "Unify aesthetics and ensure visual consistency across your projects",
+  "version": "0.1.0",
+  "keywords": [
+    "Foundations",
+    "Design",
+    "Design Tokens",
+    "Consistency",
+    "Agility"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lucasaugustsof/astra-ui.git",
+    "directory": "packages/foundations"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "private": false,
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs",
     "lint": "eslint src/** --fix"
