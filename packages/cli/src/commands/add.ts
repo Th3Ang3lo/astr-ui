@@ -11,6 +11,7 @@ import { installComponentDependencies } from '@/utils/install-component-dependen
 import { handleEnvironmentError } from '@/utils/errors/handle-environment-error'
 import { handleError } from '@/utils/errors/handle-error'
 import { parse } from '@/utils/json'
+import { saveAddedComponent } from '@/utils/save-added-component'
 
 import { spinner } from '@/lib/spinner'
 import { logger } from '@/lib/logger'
@@ -41,24 +42,24 @@ export const add = new Command()
 
       const componentOptionsAvailable = await getOptionsAvailableComponents()
 
-      let componentToInstall = componentName
+      let componentToAdd = componentName
 
       if (!componentName) {
         const selectedComponent = await promptSelectComponent(
           componentOptionsAvailable,
         )
 
-        componentToInstall = selectedComponent
+        componentToAdd = selectedComponent
       }
 
-      if (!componentOptionsAvailable.includes(componentToInstall)) {
+      if (!componentOptionsAvailable.includes(componentToAdd)) {
         throw new Error('Component not found. Try again')
       }
 
-      spinnerAddComponent.text = `Copying code from component ${componentToInstall} to your project`
+      spinnerAddComponent.text = `Copying code from component ${componentToAdd} to your project`
       spinnerAddComponent.start()
 
-      const repositoryComponentPath = `./${GITHUB_LOCAL_CODE_COMPONENTS}/${componentToInstall}/index.tsx`
+      const repositoryComponentPath = `./${GITHUB_LOCAL_CODE_COMPONENTS}/${componentToAdd}/index.tsx`
       const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${repositoryComponentPath}?${GITHUB_BRANCH_REF}`
 
       const { data } = await GITHUB_API.get<ResponseData>(request)
@@ -72,14 +73,16 @@ export const add = new Command()
       const componentPath = parse(astraUIConfigFile).componentPath
 
       await fs.writeFile(
-        `./${componentPath}/${componentToInstall}.tsx`,
+        `./${componentPath}/${componentToAdd}.tsx`,
         componentCode,
       )
+
+      saveAddedComponent(componentToAdd)
 
       spinnerAddComponent.succeed()
 
       logger.success(
-        `Component ${componentToInstall} has been successfully added to your project`,
+        `Component ${componentToAdd} has been successfully added to your project`,
       )
     } catch (error) {
       spinnerAddComponent.fail(error.message)
