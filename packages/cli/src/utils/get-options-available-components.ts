@@ -1,6 +1,10 @@
 import { GITHUB_API } from '@/services/github-api'
 
-import { GITHUB_BRANCH_REF, GITHUB_ENDPOINT_CONTENT_DIR } from '@/constants'
+import {
+  GITHUB_ENDPOINT_CONTENT_DIR,
+  GITHUB_LOCAL_CODE_COMPONENTS,
+  GITHUB_BRANCH_REF,
+} from '@/constants'
 
 interface ResponseData {
   name: string
@@ -8,7 +12,7 @@ interface ResponseData {
 
 export async function getOptionsAvailableComponents(): Promise<string[]> {
   try {
-    const request = `/${GITHUB_ENDPOINT_CONTENT_DIR}/packages/components/src?${GITHUB_BRANCH_REF}`
+    const request = `/${GITHUB_ENDPOINT_CONTENT_DIR}/${GITHUB_LOCAL_CODE_COMPONENTS}?${GITHUB_BRANCH_REF}`
 
     const { data } = await GITHUB_API.get<ResponseData[]>(request)
 
@@ -18,6 +22,6 @@ export async function getOptionsAvailableComponents(): Promise<string[]> {
 
     return componentOptionsAvailable
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error.message)
   }
 }

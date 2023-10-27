@@ -17,6 +17,7 @@ import { logger } from '@/lib/logger'
 
 import {
   GITHUB_ENDPOINT_CONTENT_DIR,
+  GITHUB_LOCAL_CODE_COMPONENTS,
   GITHUB_BRANCH_REF,
   ASTRA_UI_JSON,
 } from '@/constants'
@@ -57,7 +58,7 @@ export const add = new Command()
       spinnerAddComponent.text = `Copying code from component ${componentToInstall} to your project`
       spinnerAddComponent.start()
 
-      const repositoryComponentPath = `./packages/components/src/${componentToInstall}.tsx`
+      const repositoryComponentPath = `./${GITHUB_LOCAL_CODE_COMPONENTS}/${componentToInstall}/index.tsx`
       const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${repositoryComponentPath}?${GITHUB_BRANCH_REF}`
 
       const { data } = await GITHUB_API.get<ResponseData>(request)
