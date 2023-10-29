@@ -20,7 +20,7 @@ export const init = new Command()
   )
   .action(runInitCommand)
 
-async function runInitCommand() {
+export async function runInitCommand() {
   await ensureEnvironmentIsConfigured()
 
   const pathSaveComponents = await promptAskingSaveComponent()

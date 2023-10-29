@@ -26,12 +26,15 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsup src/index.ts --dts --format esm,cjs",
-    "lint": "eslint src/**/*.ts --fix"
+    "lint": "eslint src/**/*.ts --fix",
+    "test:watch": "vitest --watch",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@astr-ui/ts-config": "workspace*",
     "@types/node": "^20.8.6",
-    "@types/prompts": "^2.4.6"
+    "@types/prompts": "^2.4.6",
+    "vitest": "^0.34.6"
   },
   "dependencies": {
     "axios": "^1.5.1",
