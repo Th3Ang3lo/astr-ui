@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "useUnknownInCatchVariables": false,
+    "paths": {
+      "@development-tools/*": ["./src/development-tools/*"]
+    }
+  },
+  "extends": "expo/tsconfig.base"
+}

@@ -8,7 +8,7 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "ast-components",
-    "@ast-ui/ts-config"
+    "@astr-ui/ts-config",
+    "astr-docs"
   ]
 }
