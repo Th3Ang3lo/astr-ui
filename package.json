@@ -5,7 +5,7 @@
     "husky:prepare": "husky install",
     "changeset": "npx @changesets/cli",
     "increase-version": "changeset version",
-    "release": "turbo run build --filter=ast-components && changeset publish"
+    "release": "turbo run build --filter=astr-docs && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
