@@ -1,21 +1,7 @@
-import { stringify } from '@/utils/json'
-
-// GitHub
 export const GITHUB_BASE_URL = 'https://api.github.com'
-export const GITHUB_ENDPOINT_CONTENT_DIR =
-  'repos/lucasaugustsof/astra-ui/contents'
-export const GITHUB_BRANCH_REF = 'ref=package/cli'
+export const GITHUB_CONTENT_DIR_ENDPOINT =
+  'repos/lucasaugustsof/astr-ui/contents'
+export const GITHUB_BRANCH_REF = 'ref=develop'
 
-// Components
 export const PATH_JSON_CONFIG_FILE = './astr-ui.json'
 export const PATH_ADD_COMPONENTS = 'components/ui'
-export const ASTRA_UI_JSON_CONTENT = stringify({
-  componentPath: '',
-  components: [],
-})
-
-// Feedback
-export const ENVIRONMENT_ERROR_REASON =
-  'It looks like your environment is not configured correctly. Try running the command: npx astra-ui init'
-export const SERVICE_ERROR_REASON =
-  'An error has occurred in our service. Try again later'

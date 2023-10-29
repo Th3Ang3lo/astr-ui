@@ -5,96 +5,113 @@ import fs from 'node:fs/promises'
 
 import { GITHUB_API } from '@/services/github-api'
 
-import { getOptionsAvailableComponents } from '@/utils/get-options-available-components'
+import { availableComponentOptions } from '@/utils/available-component-options'
 import { getComponentLibraries } from '@/utils/get-component-libraries'
 import { installComponentDependencies } from '@/utils/install-component-dependencies'
-import { handleEnvironmentError } from '@/utils/errors/handle-environment-error'
-import { handleError } from '@/utils/errors/handle-error'
+import { getAlreadyAddedComponents } from '@/utils/get-already-added-components'
 import { parse } from '@/utils/json'
+import { handleError } from '@/utils/handle-error'
 
 import { spinner } from '@/lib/spinner'
-import { logger } from '@/lib/logger'
 
 import {
-  GITHUB_ENDPOINT_CONTENT_DIR,
+  GITHUB_CONTENT_DIR_ENDPOINT,
   GITHUB_BRANCH_REF,
-  ASTRA_UI_JSON,
+  PATH_JSON_CONFIG_FILE,
 } from '@/constants'
 
 interface ResponseData {
   content: string
 }
 
-const commandName = 'add'
-const commandDescription = 'Command to add Astra UI component to your project'
-
 const spinnerAddComponent = spinner()
 
 export const add = new Command()
-  .name(commandName)
-  .description(commandDescription)
+  .name('add')
+  .description('Run the command to add the Astr UI component to your project')
   .argument('[component]', 'Component name for installation')
   .action(async (componentName) => {
     try {
-      handleEnvironmentError()
+      const availableComponents = await availableComponentOptions()
+      const componentsAlreadyAdded = await getAlreadyAddedComponents()
 
-      const componentOptionsAvailable = await getOptionsAvailableComponents()
-
-      let componentToInstall = componentName
+      let componentToAdd = componentName
 
       if (!componentName) {
         const selectedComponent = await promptSelectComponent(
-          componentOptionsAvailable,
+          availableComponents,
+          componentsAlreadyAdded,
         )
 
-        componentToInstall = selectedComponent
+        componentToAdd = selectedComponent
       }
 
-      if (!componentOptionsAvailable.includes(componentToInstall)) {
-        throw new Error('Component not found. Try again')
+      if (typeof componentToAdd !== 'string') {
+        throw new Error(
+          'Operation cancelled. No components have been added to your project.',
+        )
       }
 
-      spinnerAddComponent.text = `Copying code from component ${componentToInstall} to your project`
-      spinnerAddComponent.start()
+      const isComponentExists = availableComponents.includes(componentToAdd)
 
-      const repositoryComponentPath = `./packages/components/src/${componentToInstall}.tsx`
-      const request = `${GITHUB_ENDPOINT_CONTENT_DIR}/${repositoryComponentPath}?${GITHUB_BRANCH_REF}`
+      const isComponentAlreadyAdded =
+        componentsAlreadyAdded?.includes(componentToAdd)
 
-      const { data } = await GITHUB_API.get<ResponseData>(request)
+      if (!isComponentExists) {
+        handleError(`Component ${componentToAdd} was not found. Try again.`)
+      }
+
+      if (isComponentAlreadyAdded) {
+        handleError(
+          `Component ${componentToAdd} has already been added to your project.`,
+        )
+      }
+
+      spinnerAddComponent.start(
+        `Adding component ${componentToAdd} code to your project...`,
+      )
+
+      const astrDocsComponentPath = `apps/astr-docs/src/components/${componentToAdd}/index.tsx`
+      const componentRequestUrl = `${GITHUB_CONTENT_DIR_ENDPOINT}/${astrDocsComponentPath}?${GITHUB_BRANCH_REF}`
+
+      const { data } = await GITHUB_API.get<ResponseData>(componentRequestUrl)
 
       const componentCode = atob(data.content)
 
       const librariesFoundComponent = getComponentLibraries(componentCode)
       await installComponentDependencies(librariesFoundComponent)
 
-      const astraUIConfigFile = await fs.readFile(ASTRA_UI_JSON, 'utf-8')
-      const componentPath = parse(astraUIConfigFile).componentPath
+      const configJsonFile = await fs.readFile(PATH_JSON_CONFIG_FILE, 'utf-8')
+      const { componentPath } = parse(configJsonFile)
 
       await fs.writeFile(
-        `./${componentPath}/${componentToInstall}.tsx`,
+        `./${componentPath}/${componentToAdd}.tsx`,
         componentCode,
       )
 
-      spinnerAddComponent.succeed()
-
-      logger.success(
-        `Component ${componentToInstall} has been successfully added to your project`,
+      spinnerAddComponent.succeed(
+        `Component ${componentToAdd} has been successfully added to your project.`,
       )
     } catch (error) {
       spinnerAddComponent.fail(error.message)
-      handleError(error)
     }
   })
 
-async function promptSelectComponent(componentOptions: string[]) {
+async function promptSelectComponent(
+  addComponentOptions: string[],
+  componentsAlreadyAdded?: string[],
+) {
   const response = await prompts({
     type: 'select',
     name: 'selectedComponent',
-    message: 'Choose a component you want to install:',
-    choices: componentOptions.map((component) => {
+    message: 'Select the component you want to add:',
+    choices: addComponentOptions.map((component) => {
+      const isDisabledComponent = componentsAlreadyAdded?.includes(component)
+
       return {
         title: component,
         value: component,
+        disabled: isDisabledComponent,
       }
     }),
   })
