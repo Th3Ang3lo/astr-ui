@@ -5,6 +5,7 @@ import { existsSync, promises as fs } from 'node:fs'
 
 import { createJsonConfigFile } from '@/utils/create-json-config-file'
 import { parse } from '@/utils/json'
+import { handleError } from '@/utils/handle-error'
 
 import { spinner } from '@/lib/spinner'
 import { logger } from '@/lib/logger'
@@ -20,28 +21,26 @@ export const init = new Command()
   )
   .action(runInitCommand)
 
-async function runInitCommand() {
+export async function runInitCommand() {
   await ensureEnvironmentIsConfigured()
 
   const pathSaveComponents = await promptAskingSaveComponent()
 
   if (!pathSaveComponents) {
-    logger.error(
+    handleError(
       'Astr UI development environment initialization process was canceled by you.',
     )
-
-    process.exit(0)
   }
 
-  spinnerPrepareEnvironment.text =
-    'Initializing the Astr UI development environment...'
-  spinnerPrepareEnvironment.start()
+  spinnerPrepareEnvironment.start(
+    'Initializing the Astr UI development environment...',
+  )
 
   const componentPath = `./${pathSaveComponents}/${PATH_ADD_COMPONENTS}`
 
-  const checkComponentsDirectoryExists = existsSync(componentPath)
+  const isComponentSaveDirectoryPresent = existsSync(componentPath)
 
-  if (!checkComponentsDirectoryExists) {
+  if (!isComponentSaveDirectoryPresent) {
     await fs.mkdir(componentPath, {
       recursive: true,
     })
