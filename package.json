@@ -1,5 +1,5 @@
 {
-  "name": "ast-ui",
+  "name": "astr-ui",
   "private": true,
   "scripts": {
     "husky:prepare": "husky install",
