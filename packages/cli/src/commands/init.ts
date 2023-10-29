@@ -3,49 +3,41 @@ import prompts from 'prompts'
 
 import { existsSync, promises as fs } from 'node:fs'
 
-import { parse, stringify } from '@/utils/json'
-import { handleError } from '@/utils/errors/handle-error'
+import { createJsonConfigFile } from '@/utils/create-json-config-file'
+import { parse } from '@/utils/json'
 
 import { spinner } from '@/lib/spinner'
 import { logger } from '@/lib/logger'
 
-import {
-  ADD_COMPONENTS_PATH,
-  ASTRA_UI_JSON_CONTENT,
-  ASTRA_UI_JSON,
-} from '@/constants'
-
-const commandName = 'init'
-const commandDescription =
-  'Command to configure the Astra UI development environment'
+import { PATH_ADD_COMPONENTS, PATH_JSON_CONFIG_FILE } from '@/constants'
 
 const spinnerPrepareEnvironment = spinner()
 
 export const init = new Command()
-  .name(commandName)
-  .description(commandDescription)
-  .action(async () => {
-    try {
-      await runInitCommand()
-    } catch (error) {
-      spinnerPrepareEnvironment.fail(error.message)
-
-      handleError(error)
-    }
-  })
+  .name('init')
+  .description(
+    'Run the command to initialize the Astr UI development environment',
+  )
+  .action(runInitCommand)
 
 async function runInitCommand() {
-  const rootDirComponents = await promptAskingSaveComponent()
+  await ensureEnvironmentIsConfigured()
 
-  if (!rootDirComponents) {
-    throw new Error('You canceled the Astra UI environment preparation process')
+  const pathSaveComponents = await promptAskingSaveComponent()
+
+  if (!pathSaveComponents) {
+    logger.error(
+      'Astr UI development environment initialization process was canceled by you.',
+    )
+
+    process.exit(0)
   }
 
   spinnerPrepareEnvironment.text =
-    'Preparing environment to add Astra UI components'
+    'Initializing the Astr UI development environment...'
   spinnerPrepareEnvironment.start()
 
-  const componentPath = `${rootDirComponents}/${ADD_COMPONENTS_PATH}`
+  const componentPath = `./${pathSaveComponents}/${PATH_ADD_COMPONENTS}`
 
   const checkComponentsDirectoryExists = existsSync(componentPath)
 
@@ -55,31 +47,38 @@ async function runInitCommand() {
     })
   }
 
-  const astraUIJson = parse(ASTRA_UI_JSON_CONTENT)
-
-  const astraUIConfigFile = stringify({
-    ...astraUIJson,
+  await createJsonConfigFile({
     componentPath,
   })
 
-  await fs.writeFile(ASTRA_UI_JSON, astraUIConfigFile, 'utf-8')
-
-  spinnerPrepareEnvironment.text =
-    'Astra UI development environment ready to add components'
-  spinnerPrepareEnvironment.succeed()
-
-  logger.success(
-    'Your development environment is ready to use Astra UI components',
+  spinnerPrepareEnvironment.succeed(
+    'The Astr UI development environment is optimized and ready for you to add\ncomponents to your project.',
   )
 }
 
 async function promptAskingSaveComponent() {
   const response = await prompts({
     type: 'text',
-    name: 'rootDirComponents',
-    message: 'Where do you want to save your components?',
+    name: 'pathSaveComponents',
+    message: 'What is the desired way to store your components?',
     initial: 'src',
   })
 
-  return response.rootDirComponents
+  return response.pathSaveComponents
+}
+
+async function ensureEnvironmentIsConfigured() {
+  const checkConfigFileExists = existsSync(PATH_JSON_CONFIG_FILE)
+
+  if (checkConfigFileExists) {
+    const configFileContent = await fs.readFile(PATH_JSON_CONFIG_FILE, 'utf-8')
+    const parsedConfigFileContent = parse(configFileContent)
+
+    if ('componentPath' in parsedConfigFileContent) {
+      logger.warning(
+        'It looks like the Astr UI development environment is already\nconfigured. No need to configure it again.',
+      )
+      process.exit(0)
+    }
+  }
 }

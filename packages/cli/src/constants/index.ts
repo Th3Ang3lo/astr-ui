@@ -7,8 +7,8 @@ export const GITHUB_ENDPOINT_CONTENT_DIR =
 export const GITHUB_BRANCH_REF = 'ref=package/cli'
 
 // Components
-export const ASTRA_UI_JSON = './astra-ui.json'
-export const ADD_COMPONENTS_PATH = 'components/ui'
+export const PATH_JSON_CONFIG_FILE = './astr-ui.json'
+export const PATH_ADD_COMPONENTS = 'components/ui'
 export const ASTRA_UI_JSON_CONTENT = stringify({
   componentPath: '',
   components: [],
