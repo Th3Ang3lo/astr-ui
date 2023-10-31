@@ -24,6 +24,6 @@
     "lint": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
-    "@ast-ui/ts-config": "workspace*"
+    "@astr-ui/ts-config": "workspace*"
   }
 }

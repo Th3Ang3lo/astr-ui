@@ -1,5 +1,5 @@
 {
-  "extends": "@lucasaugustsof/ts-config/base.json",
+  "extends": "@astr-ui/ts-config/base.json",
   "compilerOptions": {
     "useUnknownInCatchVariables": false,
     "paths": {

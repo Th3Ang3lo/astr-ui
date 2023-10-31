@@ -14,7 +14,7 @@
     "directory": "packages/astra"
   },
   "version": "0.0.0",
-  "bin": "dist/index.js",
+  "bin": "dist/index.mjs",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -29,7 +29,7 @@
     "lint": "eslint src/**/*.ts --fix"
   },
   "devDependencies": {
-    "@ast-ui/ts-config": "workspace*",
+    "@astr-ui/ts-config": "workspace*",
     "@types/node": "^20.8.6",
     "@types/prompts": "^2.4.6"
   },

@@ -39,7 +39,7 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  apps/ast-components:
+  apps/astr-docs:
     dependencies:
       expo:
         specifier: ~49.0.15
@@ -117,8 +117,14 @@ importers:
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      react-native:
+        specifier: 0.72.6
+        version: 0.72.6(@babel/core@7.23.2)(@babel/preset-env@7.23.2)(react@18.2.0)
     devDependencies:
-      '@ast-ui/ts-config':
+      '@astr-ui/ts-config':
         specifier: workspace*
         version: link:../ts-config
       '@types/node':
@@ -130,7 +136,7 @@ importers:
 
   packages/foundations:
     devDependencies:
-      '@ast-ui/ts-config':
+      '@astr-ui/ts-config':
         specifier: workspace*
         version: link:../ts-config
 
