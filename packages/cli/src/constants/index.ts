@@ -3,5 +3,5 @@ export const GITHUB_CONTENT_DIR_ENDPOINT =
   'repos/lucasaugustsof/astr-ui/contents'
 export const GITHUB_BRANCH_REF = 'ref=develop'
 
-export const PATH_JSON_CONFIG_FILE = './astr-ui.json'
-export const PATH_ADD_COMPONENTS = 'components/ui'
+export const COMPONENTS_ADD_PATH = 'components/ui'
+export const CONFIG_JSON_FILE_PATH = './astr-ui.json'
