@@ -34,9 +34,3 @@ export const init = new Command()
     'Run the command to initialize the Astr UI development environment',
   )
   .action(executeInitCommand)
-
-/**
- * O que precisa ser feito?
- *
- * - [ ] Configurar o ambiente da biblioteca Reanimated
- */
