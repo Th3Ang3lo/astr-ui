@@ -1,6 +1,6 @@
 import prompts from 'prompts'
 
-export async function promptSaveComponents() {
+export async function promptComponentPath() {
   const { directoryForAddedComponents } = await prompts({
     type: 'text',
     name: 'directoryForAddedComponents',

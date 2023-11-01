@@ -1,28 +1,17 @@
 import { exec } from 'child_process'
 
-import fs from 'node:fs'
 import { promisify } from 'node:util'
 
-import { parse } from '@/utils/json'
+const commandExecutor = promisify(exec)
 
-const executeCommand = promisify(exec)
-
-export async function installDependencies(
-  dependencies: string[],
-): Promise<void> {
+export async function installDependencies(libraries: string | string[]) {
   const packageManager = 'pnpm'
 
-  const packageJsonFile = parse(fs.readFileSync('./package.json', 'utf-8'))
+  let installCmd = `${packageManager} add ${libraries}`
 
-  if ('dependencies' in packageJsonFile) {
-    const installedDependencies = Object.keys(packageJsonFile.dependencies)
-
-    for (const dependency of dependencies) {
-      if (installedDependencies.includes(dependency)) {
-        continue
-      }
-
-      await executeCommand(`${packageManager} install ${dependency}`)
-    }
+  if (typeof libraries !== 'string') {
+    installCmd = `${packageManager} add ${libraries.join(' ')}`
   }
+
+  await commandExecutor(installCmd)
 }

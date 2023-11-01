@@ -1,15 +1,17 @@
 import { Command } from 'commander'
 
-import { promptSaveComponents } from './prompts/prompt-save-components'
+import { existsSync } from 'node:fs'
 
-import { spinner } from '@/utils/spinner'
+import { promptComponentPath } from './prompts/prompt-component-path'
+import { promptBabelConfigPath } from './prompts/prompt-babel-config-path'
+
+import { reanimatedSetupTask } from './tasks/reanimated-setup-task'
+import { configSetupTask } from './tasks/config-setup-task'
+
 import { handleError } from '@/utils/handle-error'
-import { configSetupFiles } from '@/utils/config-setup-files'
-
-const environmentPreparationLoading = spinner()
 
 export async function executeInitCommand() {
-  const { directoryForAddedComponents } = await promptSaveComponents()
+  const { directoryForAddedComponents } = await promptComponentPath()
 
   if (!directoryForAddedComponents) {
     handleError(
@@ -17,15 +19,20 @@ export async function executeInitCommand() {
     )
   }
 
-  environmentPreparationLoading.start(
-    'Initializing the Astr UI development environment...',
-  )
+  const { babelConfigPath } = await promptBabelConfigPath()
 
-  configSetupFiles(directoryForAddedComponents)
+  const isBabelFilePresent = existsSync(babelConfigPath)
 
-  environmentPreparationLoading.succeed(
-    'The Astr UI environment is ready to add components to your project.',
-  )
+  if (!isBabelFilePresent) {
+    handleError('The babel.config.js file was not found in the path provided.')
+  }
+
+  await reanimatedSetupTask(babelConfigPath)
+
+  await configSetupTask({
+    directoryForAddedComponents,
+    babelConfigPath,
+  })
 }
 
 export const init = new Command()
