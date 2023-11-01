@@ -1,6 +1,6 @@
 import { Command } from 'commander'
 
-import { existsSync } from 'node:fs'
+import fs from 'node:fs'
 
 import { promptComponentPath } from './prompts/prompt-component-path'
 import { promptBabelConfigPath } from './prompts/prompt-babel-config-path'
@@ -10,19 +10,26 @@ import { configSetupTask } from './tasks/config-setup-task'
 
 import { handleError } from '@/utils/handle-error'
 
-export class InitCommand {
-  private directoryForAddedComponents = ''
-  private babelConfigPath = ''
+interface InitCommandProps {
+  directoryForAddedComponents: string
+  babelConfigPath: string
+}
 
-  public async run() {
-    await this.promptAndSetComponentDirectory()
-    await this.promptAndValidateBabelConfigPath()
-
-    await this.configureReanimatedSetup()
-    await this.configureJsonSetup()
+class InitCommand {
+  private props: InitCommandProps = {
+    directoryForAddedComponents: '',
+    babelConfigPath: '',
   }
 
-  private async promptAndSetComponentDirectory() {
+  get directoryForAddedComponents() {
+    return this.props.directoryForAddedComponents
+  }
+
+  get babelConfigPath() {
+    return this.props.babelConfigPath
+  }
+
+  public async promptAndSetComponentDirectory() {
     const { directoryForAddedComponents } = await promptComponentPath()
 
     if (!directoryForAddedComponents) {
@@ -31,13 +38,13 @@ export class InitCommand {
       )
     }
 
-    this.directoryForAddedComponents = directoryForAddedComponents
+    this.props.directoryForAddedComponents = directoryForAddedComponents
   }
 
-  private async promptAndValidateBabelConfigPath() {
+  public async promptAndValidateBabelConfigPath() {
     const { babelConfigPath } = await promptBabelConfigPath()
 
-    const isBabelFilePresent = existsSync(babelConfigPath)
+    const isBabelFilePresent = fs.existsSync(babelConfigPath)
 
     if (!isBabelFilePresent) {
       handleError(
@@ -45,34 +52,34 @@ export class InitCommand {
       )
     }
 
-    this.babelConfigPath = babelConfigPath
+    this.props.babelConfigPath = babelConfigPath
   }
 
-  private async configureReanimatedSetup() {
+  public async configureReanimatedSetup() {
     await reanimatedSetupTask(this.babelConfigPath)
   }
 
-  private async configureJsonSetup() {
+  public async configureJsonSetup() {
     await configSetupTask({
       directoryForAddedComponents: this.directoryForAddedComponents,
       babelConfigPath: this.babelConfigPath,
     })
   }
 
-  public get componentDirectoryPath() {
-    return this.directoryForAddedComponents
-  }
+  public async execute() {
+    await this.promptAndSetComponentDirectory()
+    await this.promptAndValidateBabelConfigPath()
 
-  public get currentBabelConfigPath() {
-    return this.babelConfigPath
+    await this.configureReanimatedSetup()
+    await this.configureJsonSetup()
   }
 }
 
-const initCommand = new InitCommand()
+export const initCommand = new InitCommand()
 
 export const init = new Command()
   .name('init')
   .description(
     'Run the command to initialize the Astr UI development environment',
   )
-  .action(() => initCommand.run())
+  .action(() => initCommand.execute())

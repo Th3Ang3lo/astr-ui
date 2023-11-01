@@ -29,10 +29,11 @@ export async function reanimatedSetupTask(babelConfigPath: string) {
     await fs.writeFile(babelConfigPath, reanimatedBabelConfig)
   }
 
-  if (!dependencies[libraryName]) {
+  if (!dependencies[libraryName] && process.env.NODE_ENV !== 'test') {
     reanimatedInstallationLoading.start(
       'Integrating the Reanimated dependency into your project. Wait for the installation to finish.',
     )
+
     await installDependencies(libraryName)
 
     reanimatedInstallationLoading.succeed(
