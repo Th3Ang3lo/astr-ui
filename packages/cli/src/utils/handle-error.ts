@@ -1,6 +1,9 @@
 import { logger } from '@/utils/logger'
 
 export function handleError(errorReason: string) {
-  logger.error(errorReason)
+  if (process.env.NODE_ENV !== 'test') {
+    logger.error(errorReason)
+  }
+
   process.exit(0)
 }
