@@ -10,34 +10,69 @@ import { configSetupTask } from './tasks/config-setup-task'
 
 import { handleError } from '@/utils/handle-error'
 
-export async function executeInitCommand() {
-  const { directoryForAddedComponents } = await promptComponentPath()
+export class InitCommand {
+  private directoryForAddedComponents = ''
+  private babelConfigPath = ''
 
-  if (!directoryForAddedComponents) {
-    handleError(
-      'Astr UI development environment initialization process was canceled by you.',
-    )
+  public async run() {
+    await this.promptAndSetComponentDirectory()
+    await this.promptAndValidateBabelConfigPath()
+
+    await this.configureReanimatedSetup()
+    await this.configureJsonSetup()
   }
 
-  const { babelConfigPath } = await promptBabelConfigPath()
+  private async promptAndSetComponentDirectory() {
+    const { directoryForAddedComponents } = await promptComponentPath()
 
-  const isBabelFilePresent = existsSync(babelConfigPath)
+    if (!directoryForAddedComponents) {
+      handleError(
+        'Astr UI development environment initialization process was canceled by you.',
+      )
+    }
 
-  if (!isBabelFilePresent) {
-    handleError('The babel.config.js file was not found in the path provided.')
+    this.directoryForAddedComponents = directoryForAddedComponents
   }
 
-  await reanimatedSetupTask(babelConfigPath)
+  private async promptAndValidateBabelConfigPath() {
+    const { babelConfigPath } = await promptBabelConfigPath()
 
-  await configSetupTask({
-    directoryForAddedComponents,
-    babelConfigPath,
-  })
+    const isBabelFilePresent = existsSync(babelConfigPath)
+
+    if (!isBabelFilePresent) {
+      handleError(
+        'The babel.config.js file was not found in the path provided.',
+      )
+    }
+
+    this.babelConfigPath = babelConfigPath
+  }
+
+  private async configureReanimatedSetup() {
+    await reanimatedSetupTask(this.babelConfigPath)
+  }
+
+  private async configureJsonSetup() {
+    await configSetupTask({
+      directoryForAddedComponents: this.directoryForAddedComponents,
+      babelConfigPath: this.babelConfigPath,
+    })
+  }
+
+  public get componentDirectoryPath() {
+    return this.directoryForAddedComponents
+  }
+
+  public get currentBabelConfigPath() {
+    return this.babelConfigPath
+  }
 }
+
+const initCommand = new InitCommand()
 
 export const init = new Command()
   .name('init')
   .description(
     'Run the command to initialize the Astr UI development environment',
   )
-  .action(executeInitCommand)
+  .action(() => initCommand.run())
